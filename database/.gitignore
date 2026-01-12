@@ -1,1 +1,8 @@
 *.sqlite*
+*.gemini
+*.db
+*.db-journal
+*.sqlite
+*.sqlar
+*.db-shm
+*.db-wal    
