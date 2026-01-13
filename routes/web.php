@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Sanctum\Contracts\HasApiTokens;
+use App\Http\Controllers\PostController;
+
+
+Route::get('/', [PostController::class, 'index']);
+
 
 
 /*
@@ -18,5 +23,8 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__.'/settings.php';
+
+
+Route::resource('posts', PostController::class);
 
 */

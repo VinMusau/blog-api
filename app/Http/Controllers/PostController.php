@@ -23,7 +23,9 @@ class PostController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return Post::all();
+        $posts = Post::all();
+        
+        return view('home', compact('posts'));
     }
 
     // create a relation to user
