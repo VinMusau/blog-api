@@ -14,4 +14,9 @@ class Post extends Model
         'title',
         'content',
     ];
+    // create relation to user
+    public function user()
+    {
+        return $this->belongsTo(User::class); // each post belongs to a user
+    }
 }
