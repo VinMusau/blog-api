@@ -10,7 +10,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/', [PostController::class, 'index']);
+// Route::get('/', [PostController::class, 'index']);
+
+Route::get('/posts', function() {
+    return response()->json(Post::all());
+}); 
+
 
 Route::apiResource('posts', PostController::class); 
 

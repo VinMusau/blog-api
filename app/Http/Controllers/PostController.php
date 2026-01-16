@@ -23,9 +23,9 @@ class PostController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        $posts = Post::all();
+       // $posts = Post::all();
         
-        return view('home', compact('posts'));
+        return Post::with('user')->latest()->get();
     }
 
     // create a relation to user
@@ -42,7 +42,7 @@ class PostController extends Controller implements HasMiddleware
         ]);
         $post= $request->user()->posts()->create($fields);  // create relation to user store method looks for authenticated user
                                                             //
-        return $post;
+        return ['post' => $post, 'user' => $post->user];
     }
 
     /**

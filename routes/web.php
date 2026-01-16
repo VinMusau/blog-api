@@ -7,11 +7,11 @@ use Laravel\Sanctum\Contracts\HasApiTokens;
 use App\Http\Controllers\PostController;
 
 
-Route::get('/', [PostController::class, 'index']);
+// Route::get('/', [PostController::class, 'index']);
 
 
 
-/*
+
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canRegister' => Features::enabled(Features::registration()),
@@ -27,4 +27,4 @@ require __DIR__.'/settings.php';
 
 Route::resource('posts', PostController::class);
 
-*/
+
