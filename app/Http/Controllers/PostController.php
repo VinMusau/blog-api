@@ -41,7 +41,6 @@ class PostController extends Controller implements HasMiddleware
             'content' => 'required|string',
         ]);
         $post= $request->user()->posts()->create($fields);  // create relation to user store method looks for authenticated user
-                                                            //
         return ['post' => $post, 'user' => $post->user];
     }
 
@@ -50,7 +49,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function show(Post $post)
     {
-        return $post;
+        return ['post'=>$post, 'user' => $post->user];
     }
 
     /**
@@ -58,15 +57,15 @@ class PostController extends Controller implements HasMiddleware
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        Gate::authorize('modify', $post);
+        Gate::authorize('update', $post);
 
 
         $fields = $request->validated([
-            'title' => 'sometimes|required|string|max:255',
-            'content' => 'sometimes|required|string',
+
         ]);
         $post->update($fields);
-        return $post ; 
+
+        return ['post' => $post, 'user' => $post->user];
     }
 
     /**
@@ -74,7 +73,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function destroy(Post $post)
     {
-        Gate::authorize('modify', $post);
+        Gate::authorize('delete', $post);
 
         $post->delete();
         return response()->json(['message' => 'Post deleted successfully']);

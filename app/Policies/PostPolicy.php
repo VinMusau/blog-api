@@ -10,7 +10,7 @@ use Illuminate\Auth\Access\Response;
 class PostPolicy
 {
     use HandlesAuthorization;
-    public function modify(User $user, Post $post): Response|bool
+    public function update(User $user, Post $post): Response|bool
     {
         return $user->id === $post->user_id
             ? Response::allow()

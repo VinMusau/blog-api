@@ -12,15 +12,13 @@ Route::get('/user', function (Request $request) {
 
 // Route::get('/', [PostController::class, 'index']);
 
-Route::get('/posts', function() {
-    return response()->json(Post::all());
-}); 
+// Route::get('/posts', function() { return response()->json(Post::all());}); 
 
 
 Route::apiResource('posts', PostController::class); 
 
 //edit posts
-Route::put('/posts/{post}', [PostController::class, 'update'])->middleware('auth:sanctum');
+// Route::put('/posts/{post}', [PostController::class, 'update'])->middleware('auth:sanctum');
 
 Route::post('/register', [AuthController::class, 'register']);
 
