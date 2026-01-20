@@ -25,10 +25,9 @@ class PostController extends Controller implements HasMiddleware
     {
        // $posts = Post::all();
         
-        return Post::with('user')->latest()->get();
+        return Post::with('user')->latest()->get(); // Eager load the user relationship
     }
 
-    // create a relation to user
     
 
     /**
