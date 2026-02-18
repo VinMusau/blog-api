@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
     ];
 
     /**
@@ -52,5 +53,14 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class); // define relation to posts
+    }
+    protected $appends = ['avatar_url'];
+
+    public function getAvatarUrlAttribute()
+    {
+        $name = $this->name ?? 'User';
+        return $this->avatar 
+            ? asset('storage/' . $this->avatar) 
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name);
     }
 }

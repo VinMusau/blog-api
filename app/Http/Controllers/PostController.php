@@ -8,13 +8,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-
+use App\Models\User;
 class PostController extends Controller implements HasMiddleware
 {
     public static function middleware()
     {
         return [
-            new Middleware('auth:sanctum', except: ['index', 'show']),  // Apply auth:sanctum middleware to all methods except index and show
+            new Middleware('auth:sanctum', except: ['index', 'show', 'userPosts']),  // Apply auth:sanctum middleware to all methods except index and show
             
         ];
     }
@@ -25,7 +25,9 @@ class PostController extends Controller implements HasMiddleware
     {
        // $posts = Post::all();
         
-        return Post::with('user')->latest()->get(); 
+        $posts = Post::with(['category','user'])->latest()->get(); 
+        // return view('posts.index', compact('posts'));
+        return response()->json($posts);
     }
 
     
@@ -38,9 +40,11 @@ class PostController extends Controller implements HasMiddleware
         $fields= $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
         ]);
         $post= $request->user()->posts()->create($fields);  // create relation to user store method looks for authenticated user
-        return ['post' => $post, 'user' => $post->user];
+       // return ['post' => $post, 'user' => $post->user];
+       return $post->load('category');
     }
 
     /**
@@ -66,7 +70,12 @@ class PostController extends Controller implements HasMiddleware
 
         return ['post' => $post, 'user' => $post->user];
     }
-
+    public function userPosts (User $user) 
+    {
+        return $user->posts()->with(['user','category'])->latest()->get();
+        //$posts = Post::where('user_id', $id)->with('user', 'category')->latest()->get();
+      
+    }
     /**
      * Remove the specified resource from storage.
      */
