@@ -29,6 +29,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-// Route::post('/user/avatar', [UserController::class, 'updateAvatar'])->middleware('auth:sanctum');
-
 Route::middleware('auth:sanctum')->post('user/avatar', [UserController::class, 'updateAvatar']);
+
+Route::middleware('auth:sanctum')->delete('/user/avatar', [UserController::class, 'deleteAvatar']);

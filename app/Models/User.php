@@ -3,12 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
-class User extends Authenticatable
+use Filament\Panel;
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens;
 
@@ -22,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar',
+        'is_admin',
     ];
 
     /**
@@ -47,6 +50,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'is_admin' => 'boolean',  // casting tells laravel to convert to real php true false 
         ];
     }
 
@@ -62,5 +66,10 @@ class User extends Authenticatable
         return $this->avatar 
             ? asset('storage/' . $this->avatar) 
             : 'https://ui-avatars.com/api/?name=' . urlencode($this->name);
+    }
+
+    public function canAccessPanel (Panel $panel): bool
+    {
+        return $this->is_admin === true; 
     }
 }
