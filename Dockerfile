@@ -3,6 +3,7 @@ FROM php:8.4-fpm
 
 # 1. Install system dependencies
 RUN apt-get update && apt-get install -y \
+    libicu-dev \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -10,10 +11,16 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     libsqlite3-dev \
-    zip \
     unzip \
     git \
-    curl
+    curl \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install \
+    intl \
+    bcmath \
+    gd \
+    zip \
+    pdo_mysql 
 
 # 2. Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
