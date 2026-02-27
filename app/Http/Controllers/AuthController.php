@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash; 
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -19,6 +20,8 @@ class AuthController extends Controller
         $user = User::create($fields);
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        event(new Registered($user));
 
         return response()->json([
             'user' => $user,
