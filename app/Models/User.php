@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Filament\Panel;
+use App\Models\Like;
 class User extends Authenticatable implements FilamentUser, MustVerifyEmail
 {
     use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens;
@@ -71,5 +72,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function canAccessPanel (Panel $panel): bool
     {
         return $this->is_admin === true; 
+    }
+
+    // relationship with likes
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
     }
 }

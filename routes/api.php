@@ -38,10 +38,10 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
     $request->fulfill();
 
     return redirect(env('APP_URL'). '/login?verified=1');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+})->middleware(['auth', 'signed'])->name('api.verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
-    return response()->json(['message' => 'api.Verification link sent!']);
+    return response()->json(['message' => 'Verification link sent!']);
 })->middleware(['auth', 'throttle:6,1'])->name('api.verification.send');
