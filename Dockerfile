@@ -40,11 +40,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # 7. Run composer install
 # We use --ignore-platform-reqs only if you have a weird extension local but not here
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 
 # 8. Now copy the rest of the code
 COPY . .
 
+RUN rm -f bootstrap/cache/*.php
+RUN php artisan config:clear
 # 9. Set permissions and create storage symlink
 RUN php artisan storage:link
 RUN chown -R www-data:www-data /var/www/backend/storage /var/www/backend/bootstrap/cache

@@ -18,5 +18,8 @@ class LikeController extends Controller
             $user->likes()->create(['post_id' => $postId]);
             return response()->json(['liked' => true]);
         }
+
+            // $posts = Post::withCount('likes')->get();
+
     }
 }
