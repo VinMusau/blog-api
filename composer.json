@@ -14,7 +14,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.9",
-        "symfony/resend-mailer": "^8.0"
+        "symfony/resend-mailer": "^8.0",
+        "tightenco/ziggy": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

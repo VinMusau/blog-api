@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -33,6 +34,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::middleware('auth:sanctum')->post('user/avatar', [UserController::class, 'updateAvatar']);
 
 Route::middleware('auth:sanctum')->delete('/user/avatar', [UserController::class, 'deleteAvatar']);
+
+Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
