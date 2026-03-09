@@ -77,6 +77,6 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     // relationship with likes
     public function likes()
     {
-        return $this->hasMany(Like::class);
+        return $this->belongsToMany(Post::class, 'post_like');
     }
 }

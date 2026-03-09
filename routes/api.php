@@ -35,7 +35,7 @@ Route::middleware('auth:sanctum')->post('user/avatar', [UserController::class, '
 
 Route::middleware('auth:sanctum')->delete('/user/avatar', [UserController::class, 'deleteAvatar']);
 
-Route::post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
+Route::middleware('auth:sanctum')->post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();

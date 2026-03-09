@@ -36,6 +36,12 @@ class PostResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')->label('Author'),
 
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable(),
+
+                Tables\columns\TextColumn::make('likes_count')
+                    ->counts('likes')
+                    ->label('Total Likes')
+                    ->badge()
+                    ->color('success'),
             ])
             ->filters([
                 //

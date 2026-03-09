@@ -25,7 +25,10 @@ class PostController extends Controller implements HasMiddleware
     {
        // $posts = Post::all();
         
-        $posts = Post::with(['category','user'])->latest()->get(); 
+        $posts = Post::with(['category','user'])
+            ->withCount('likes')
+            ->latest()
+            ->get(); 
         // return view('posts.index', compact('posts'));
         return response()->json($posts);
     }

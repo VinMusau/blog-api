@@ -26,6 +26,8 @@ class StatsOverview extends BaseWidget
                 ->description('Across all posts')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('warning'),
+            
+            Stat::make('Global Likes', Post::withCount('likes')->get()->sum('likes_count')),
         ];
     }
 }
