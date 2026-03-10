@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DonationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -48,3 +49,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
     return response()->json(['message' => 'Verification link sent!']);
 })->middleware(['auth', 'throttle:6,1'])->name('api.verification.send');
+
+Route::middleware('auth:sanctum')->post('/donate/mpesa', [DonationController::class, 'donate']);
+
+Route::post('/mpesa/callback', [DonationController::class, 'callback']);
