@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('categories', [CategoryController::class, 'index']);
@@ -53,3 +54,9 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::middleware('auth:sanctum')->post('/donate/mpesa', [DonationController::class, 'donate']);
 
 Route::post('/mpesa/callback', [DonationController::class, 'callback']);
+
+Route::get('/mpesa/status/{transactionId}', [DonationController::class, 'status']);
+
+Route::get('/posts/{post}/comments', [CommentController::class, 'index']);
+
+Route::middleware('auth:sanctum')->post('/comments', [CommentController::class, 'store']);

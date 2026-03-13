@@ -70,8 +70,31 @@ class DonationController extends Controller
      */
     public function callback(Request $request)
     {
-        $data = $request->getContent();
-        \Log::info('MPESA Callback Received: ' . $data);
+        $content = $request->all();
+        Log::info('MPESA Callback Received: ' . $content);
+
+        $checkoutRequestId = $content['Body']['stkCallback']['CheckoutRequestID'] ?? null;
+        $resultCode = $content['Body']['stkCallback']['ResultCode'] ?? null;
+
+        $donation = Donation::where('checkout_request_id', $checkoutRequestId)->first();
+
+        if (!$donation) {
+            return response()->json([
+                'ResultCode' => 1,
+                'message' => 'Donation record not found for this callback'
+            ]);
+        }
+
+        if ($resultCode === 0) {
+            $metadata = $content['Body']['stkcallback']['CallbackMetadata']['Item'];
+            $receipt = collect($metadata)->where('Name', 'MpesaReceiptNumber')->first()['Value'];
+            $donation->update([
+                'status' => 'completed',
+                'mpesa_receipt' => $receipt
+            ]);
+        } else {
+            $donation->update(['status' => 'failed']);
+        }
 
         return response()->json([ 'ResultCode' => 0, 'message' => 'Callback received']);
     }

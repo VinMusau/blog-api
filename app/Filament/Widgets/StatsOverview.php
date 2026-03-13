@@ -27,7 +27,12 @@ class StatsOverview extends BaseWidget
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('warning'),
             
-            Stat::make('Global Likes', Post::withCount('likes')->get()->sum('likes_count')),
+            Stat::make('Global Likes', Post::withCount('likes')
+                ->get()
+                ->sum('likes_count'))
+                ->description('All-time likes')
+                ->descriptionIcon('heroicon-m-heart')
+                ->color('danger'),
         ];
     }
 }
