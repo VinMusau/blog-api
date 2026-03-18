@@ -70,33 +70,50 @@ class DonationController extends Controller
      */
     public function callback(Request $request)
     {
+        
+        
         $content = $request->all();
-        Log::info('MPESA Callback Received: ' . $content);
+        Log::info('MPESA Callback Received' , $content);
 
-        $checkoutRequestId = $content['Body']['stkCallback']['CheckoutRequestID'] ?? null;
-        $resultCode = $content['Body']['stkCallback']['ResultCode'] ?? null;
+        try {
+            $stkCallback = $content['Body']['stkCallback'];
+            $checkoutRequestId = $stkCallback['CheckoutRequestID'];
+            $resultCode = $stkCallback['ResultCode'];
 
-        $donation = Donation::where('checkout_request_id', $checkoutRequestId)->first();
+            $donation = Donation::where('checkout_request_id', $checkoutRequestId)->first();
 
-        if (!$donation) {
+            if (!$donation) {
+                Log::error('Donation record not found for CheckoutRequestID: ' . $checkoutRequestId);
+                return response()->json([
+                    'ResultCode' => 1,
+                    'message' => 'Donation record not found for this callback'
+                ]);
+            }
+
+            if ($resultCode === 0) {
+                $metadata = $stkCallback['CallbackMetadata']['Item'];
+
+                $receipt = collect($metadata)->firstWhere('Name', 'MpesaReceiptNumber')['Value'] ?? null;
+
+                $donation->update([
+                    'status' => 'completed',
+                    'mpesa_receipt' => $receipt,
+                    'completed_at' => now(),
+                ]);
+
+                Log::info("Donation $checkoutRequestId marked as COMPLETED");
+            } else {
+                $donation->update(['status' => 'failed']);
+                Log::error("Donation $checkoutRequestId marked as FAILED. ResultCode: $resultCode");
+            }
+
+            return response()->json(['ResultCode' => 0, 'message' => 'Callback received']);
+         } catch (\Exception $e) {
+            Log::error('Error processing MPESA callback: ' . $e->getMessage());
             return response()->json([
                 'ResultCode' => 1,
-                'message' => 'Donation record not found for this callback'
-            ]);
-        }
-
-        if ($resultCode === 0) {
-            $metadata = $content['Body']['stkcallback']['CallbackMetadata']['Item'];
-            $receipt = collect($metadata)->where('Name', 'MpesaReceiptNumber')->first()['Value'];
-            $donation->update([
-                'status' => 'completed',
-                'mpesa_receipt' => $receipt
-            ]);
-        } else {
-            $donation->update(['status' => 'failed']);
-        }
-
-        return response()->json([ 'ResultCode' => 0, 'message' => 'Callback received']);
+                'message' => 'Error processing callback'
+            ], 500);
+        }    
     }
-
 }

@@ -23,6 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            'api/mpesa/callback', // Path to your callback route
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions): void {
         //
     })->create();

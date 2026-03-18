@@ -29,11 +29,22 @@ class Post extends Model
 
     public function likes()
     {
-        return $this->belongsToMany(User::class, 'post_like');
+        return $this->belongsToMany(User::class, 'likes');
     }
 
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    protected $appends = ['is_liked'];
+
+    public function getIsLikedAttribute()
+    {
+        $userId = auth()->id();
+        if (!$userId) {
+            return false; // User is not authenticated, so they can't like the post
+        }
+         return $this->likes()->where('user_id', $userId)->exists();
     }
 }

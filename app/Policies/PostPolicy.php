@@ -23,4 +23,13 @@ class PostPolicy
             ? Response::allow()
             : Response::deny('You do not own this post.');
     }
+
+    public function before(User $user, $ability)
+    {
+        if ($user->is_admin) {
+            return true; // Grant all permissions to admin users
+        }
+
+        return null; // Return null to continue with normal authorization checks for non-admin users
+    }
 }

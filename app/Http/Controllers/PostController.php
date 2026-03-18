@@ -27,6 +27,11 @@ class PostController extends Controller implements HasMiddleware
         
         $posts = Post::with(['category','user'])
             ->withCount('likes')
+            ->with(['likes' => function ($query) {
+                if (auth()->check()) {
+                    $query->where('user_id', auth()->id());
+                }
+            }])
             ->withExists('likes as is_liked')
             ->latest()
             ->get(); 

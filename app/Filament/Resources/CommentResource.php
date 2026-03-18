@@ -51,6 +51,7 @@ class CommentResource extends Resource
                 Tables\Actions\DeleteAction::make()
                     ->modalHeading('Delete Comment')
                     ->modalDescription('Are you sure you want to delete this comment? This action cannot be undone.'),
+                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

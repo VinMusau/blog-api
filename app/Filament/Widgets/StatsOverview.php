@@ -22,13 +22,14 @@ class StatsOverview extends BaseWidget
                 ->description('Live on the site')
                 ->descriptionIcon('heroicon-m-document-text')
                 ->color('info'),
-
+/*
             Stat::make('Total Reads', Post::sum('views'))
                 ->description('Across all posts')
                 ->descriptionIcon('heroicon-m-eye')
                 ->chart([7, 2, 10, 3, 15, 4, 17])
                 ->color('warning'),
             
+        */
             Stat::make('Global Likes', Post::withCount('likes')
                 ->get()
                 ->sum('likes_count'))
@@ -36,7 +37,7 @@ class StatsOverview extends BaseWidget
                 ->descriptionIcon('heroicon-m-heart')
                 ->color('danger'),
 
-            Stat::make('Total Donations', Donation::sum('amount'))
+            Stat::make('Total Donations', Donation::where('status', 'completed')->sum('amount'))
                 ->description('Coffees from readers')
                 ->descriptionIcon('heroicon-m-currency-dollar')
                 ->color('success'),

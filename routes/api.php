@@ -38,6 +38,9 @@ Route::middleware('auth:sanctum')->post('user/avatar', [UserController::class, '
 Route::middleware('auth:sanctum')->delete('/user/avatar', [UserController::class, 'deleteAvatar']);
 
 Route::middleware('auth:sanctum')->post('/posts/{post}/like', [LikeController::class, 'toggle'])->name('posts.like');
+Route::middleware('auth:sanctum')->get('/user/likes', function (Request $request) {
+    return $request->user()->likedPosts()->pluck('post_id');
+});
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
