@@ -23,7 +23,12 @@ class PostResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255),
+            
+                Forms\Components\Textarea::make('content')
+                    ->required()
             ]);
     }
 

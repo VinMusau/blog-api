@@ -24,8 +24,9 @@ class CommentResource extends Resource
     {
         return $form
             ->schema([
-                //
-            ]);
+                Forms\Components\TextInput::make('body')
+                    ->required()
+                    ->maxLength(1000),]);
     }
 
     public static function table(Table $table): Table
